@@ -1,0 +1,36 @@
+# version: "3.8"
+
+services:
+
+  backend:
+    build: ./backend
+    restart: always
+    networks:
+      - CMSPortfolio
+    ports:
+      - "5300:4000"
+
+  frontend:
+    build: ./frontend
+    restart: always
+    networks:
+      - CMSPortfolio
+    ports:
+      - "5200:80"
+
+  mongo_flix_tinder:
+    image: mongo
+    restart: always
+    networks:
+      - CMSPortfolio
+    ports:
+      - 27020:27017
+    volumes:
+      - mongo-data:/data/db
+
+networks:
+  CMSPortfolio:
+    driver: bridge
+
+volumes:
+  mongo-data:
