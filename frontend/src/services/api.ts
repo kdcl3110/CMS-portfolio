@@ -1,10 +1,10 @@
 import axios from "axios";
-// import { baseURL } from "../utils/baseUrl";
+import { baseURL } from "../utils/baseUrl";
 /**
  * Axios defaults
  */
 const { VITE_BACKEND_URL } = import.meta.env;
-axios.defaults.baseURL = '/api';
+axios.defaults.baseURL = baseURL;
 
 // Headers
 axios.defaults.headers.common["Content-Type"] = "application/json";
