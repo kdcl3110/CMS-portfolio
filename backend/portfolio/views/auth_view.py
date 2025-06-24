@@ -94,7 +94,6 @@ class UpdateProfilView(APIView):
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class ResetPasswordConfirmView(APIView):
     permission_classes = [AllowAny]
 
@@ -129,20 +128,21 @@ class ResetPasswordConfirmView(APIView):
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         try:
             refresh_token = request.data["refresh"]
+            print(f"refresh : {refresh_token}" )
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({'message': 'Déconnexion réussie'}, status=status.HTTP_200_OK)
         except Exception as e:
+            print(f"error {e}")
             return Response({'error': 'Token invalide'}, status=status.HTTP_400_BAD_REQUEST)
 
-class CurrentUserView(APIView):
+class CurrentUserView(APIView): 
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

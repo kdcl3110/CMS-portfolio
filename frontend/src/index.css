@@ -1,0 +1,203 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Variables CSS personnalisées */
+:root {
+  --font-outfit: Outfit, sans-serif;
+
+  --text-title-2xl: 72px;
+  --text-title-xl: 60px;
+  --text-title-lg: 48px;
+  --text-title-md: 36px;
+  --text-title-sm: 30px;
+  --text-theme-xl: 20px;
+  --text-theme-sm: 14px;
+  --text-theme-xs: 12px;
+
+  --color-brand-25: #f2f7ff;
+  --color-brand-50: #ecf3ff;
+  --color-brand-100: #dde9ff;
+  --color-brand-200: #c2d6ff;
+  --color-brand-300: #9cb9ff;
+  --color-brand-400: #7592ff;
+  --color-brand-500: #465fff;
+  --color-brand-600: #3641f5;
+  --color-brand-700: #2a31d8;
+  --color-brand-800: #252dae;
+  --color-brand-900: #262e89;
+  --color-brand-950: #161950;
+
+  --color-gray-25: #fcfcfd;
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f2f4f7;
+  --color-gray-200: #e4e7ec;
+  --color-gray-300: #d0d5dd;
+  --color-gray-400: #98a2b3;
+  --color-gray-500: #667085;
+  --color-gray-600: #475467;
+  --color-gray-700: #344054;
+  --color-gray-800: #1d2939;
+  --color-gray-900: #101828;
+  --color-gray-950: #0c111d;
+  --color-gray-dark: #1a2231;
+
+  /* Autres couleurs */
+  --color-success-500: #12b76a;
+  --color-error-500: #f04438;
+  --color-warning-500: #f79009;
+  --color-orange-500: #fb6514;
+}
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+  
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+  
+  body {
+    @apply relative font-normal bg-gray-50;
+    font-family: var(--font-outfit);
+  }
+}
+
+@layer components {
+  .menu-item {
+    @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-sm;
+  }
+
+  .menu-item-active {
+    @apply bg-blue-50 text-blue-500;
+    background-color: var(--color-brand-50);
+    color: var(--color-brand-500);
+  }
+
+  .menu-item-inactive {
+    @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700;
+  }
+
+  .menu-item-icon {
+    @apply text-gray-500 group-hover:text-gray-700;
+  }
+
+  .menu-item-icon svg {
+    @apply !w-6 !h-6;
+  }
+
+  .menu-dropdown-item {
+    @apply relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium;
+  }
+
+  .no-scrollbar {
+    /* Chrome, Safari and Opera */
+    -webkit-scrollbar {
+        display: none;
+    }
+    /* IE and Edge */
+    -ms-overflow-style: none;
+    /* Firefox */
+    scrollbar-width: none;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    @apply w-1.5 h-1.5;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply rounded-full;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-200 rounded-full;
+  }
+
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #344054;
+  }
+}
+
+@layer utilities {
+  /* Utilitaires personnalisés */
+  .text-title-2xl {
+    font-size: var(--text-title-2xl);
+    line-height: 90px;
+  }
+  
+  .text-title-xl {
+    font-size: var(--text-title-xl);
+    line-height: 72px;
+  }
+  
+  .text-title-lg {
+    font-size: var(--text-title-lg);
+    line-height: 60px;
+  }
+
+  /* Pour Remove Date Icon */
+  input[type="date"]::-webkit-inner-spin-button,
+  input[type="time"]::-webkit-inner-spin-button,
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+  }
+}
+
+/* Styles pour les checkboxes */
+.tableCheckbox:checked ~ span span {
+  @apply opacity-100;
+}
+
+.tableCheckbox:checked ~ span {
+  border-color: var(--color-brand-500);
+  background-color: var(--color-brand-500);
+}
+
+.form-check-input:checked ~ span {
+  border: 6px solid var(--color-brand-500);
+  background-color: var(--color-brand-500);
+}
+
+.taskCheckbox:checked ~ .box span {
+  @apply opacity-100;
+  background-color: var(--color-brand-500);
+}
+
+.taskCheckbox:checked ~ p {
+  @apply text-gray-400 line-through;
+}
+
+.taskCheckbox:checked ~ .box {
+  border-color: var(--color-brand-500);
+  background-color: var(--color-brand-500);
+}
+
+/* Styles pour les tâches */
+.task {
+  transition: all 0.2s ease;
+  border-radius: 0.75rem;
+  box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.1),
+    0px 1px 2px 0px rgba(16, 24, 40, 0.06);
+  opacity: 0.8;
+  cursor: grabbing;
+}
+
+/* Styles pour les bibliothèques tierces (ApexCharts, FullCalendar, etc.) */
+.apexcharts-legend-text {
+  @apply !text-gray-700;
+}
+
+.apexcharts-text {
+  @apply !fill-gray-700;
+}
+
+/* Tous les autres styles spécifiques aux bibliothèques... */

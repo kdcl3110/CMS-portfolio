@@ -1,5 +1,11 @@
 export default {
-  currentUser: {},
+  currentUser: {
+    id: null,
+    username: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+  },
   isLoggedIn: false,
   socket: null,
 };

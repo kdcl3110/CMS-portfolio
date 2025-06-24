@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'portfolio',
     'rest_framework_simplejwt',
     'corsheaders',
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 REST_FRAMEWORK = {
@@ -50,7 +51,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.IsAuthenticated'
     ]
 }
 
@@ -98,10 +99,10 @@ DEFAULT_FROM_EMAIL = '________'
 AUTH_USER_MODEL = 'portfolio.User'
 
 # CORS (pour le frontend)
-# CORS_ALLOWED_ORIGINS = [
-#     "http://localhost:3000",  # React
-#     "http://127.0.0.1:3000",
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",  # React
+    "http://127.0.0.1:8080",
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

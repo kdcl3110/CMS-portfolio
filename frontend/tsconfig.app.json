@@ -22,5 +22,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src"]
+  "include": ["src", "../../../He2b/Q2/bureau_detude/tinder-film/frontend/src/pages/Signin.jsx"]
 }

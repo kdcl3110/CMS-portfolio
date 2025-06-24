@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import { io } from "socket.io-client";
 import { replaceCurrentUser, replaceIsLoggedIn } from "./slices/auth";
 import { AppDispatch, RootState } from "./store";
 
@@ -19,8 +18,10 @@ const Init: React.FC<InitProps> = ({ children }) => {
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
-      if (!currentUser || JSON.stringify(currentUser) == "{}") {
+      if (JSON.stringify(currentUser)?.id == null) {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
+        console.log("User from localStorage:", user);
+        
         dispatch(replaceCurrentUser(user));
         dispatch(replaceIsLoggedIn(true));
       }

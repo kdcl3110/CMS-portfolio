@@ -1,5 +1,5 @@
 import moment from "moment";
-import "moment/dist/locale/fr";
+// import "moment/dist/locale/fr";
 
 interface DateLangProps {
   date: string | Date;
