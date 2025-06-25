@@ -5,10 +5,10 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import ArticleIcon from "@mui/icons-material/Article";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import SchoolIcon from '@mui/icons-material/School';
-import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';
-import PublicIcon from '@mui/icons-material/Public';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import SchoolIcon from "@mui/icons-material/School";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
+import PublicIcon from "@mui/icons-material/Public";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 // Assume these icons are imported from an icon library
 import {
   BoxCubeIcon,
@@ -67,20 +67,26 @@ const navItems: NavItem[] = [
     name: "Socials",
     path: "/socials",
   },
+  // {
+  //   name: "Forms",
+  //   icon: <ListIcon />,
+  //   subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+  // },
+];
+
+const blogItems: NavItem[] = [
   {
     icon: <ArticleIcon />,
     name: "Articles",
     path: "/articles",
   },
+];
+
+const contactItems: NavItem[] = [
   {
     icon: <NotificationsIcon />,
     name: "Contacts",
     path: "/contacts",
-  },
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
   },
 ];
 
@@ -99,7 +105,7 @@ const AppSidebar: React.FC = () => {
   ];
 
   const [openSubmenu, setOpenSubmenu] = useState<{
-    type: "main" | "others";
+    type: "main" | "others" | "blog" | "notification";
     index: number;
   } | null>(null);
   const [subMenuHeight, setSubMenuHeight] = useState<Record<string, number>>(
@@ -149,7 +155,10 @@ const AppSidebar: React.FC = () => {
     }
   }, [openSubmenu]);
 
-  const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
+  const handleSubmenuToggle = (
+    index: number,
+    menuType: "main" | "others" | "blog" | "notification"
+  ) => {
     setOpenSubmenu((prevOpenSubmenu) => {
       if (
         prevOpenSubmenu &&
@@ -162,7 +171,10 @@ const AppSidebar: React.FC = () => {
     });
   };
 
-  const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
+  const renderMenuItems = (
+    items: NavItem[],
+    menuType: "main" | "others" | "blog" | "notification"
+  ) => (
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
         <li key={nav.name}>
@@ -345,13 +357,48 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
+                  "Personal Info"
                 ) : (
                   <HorizontaLDots className="size-6" />
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
+
+            <div className="">
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                  !isExpanded && !isHovered
+                    ? "lg:justify-center"
+                    : "justify-start"
+                }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Blog"
+                ) : (
+                  <HorizontaLDots />
+                )}
+              </h2>
+              {renderMenuItems(blogItems, "blog")}
+            </div>
+
+            <div className="">
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                  !isExpanded && !isHovered
+                    ? "lg:justify-center"
+                    : "justify-start"
+                }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Notifications"
+                ) : (
+                  <HorizontaLDots />
+                )}
+              </h2>
+              {renderMenuItems(contactItems, "notification")}
+            </div>
+
             <div className="">
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${

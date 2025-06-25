@@ -246,7 +246,7 @@ const Social: React.FC = () => {
                     {order.projectName}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex space-x-2">
+                    <div className="flex items-center space-x-2">
                       <IconButton color="info" aria-label="delete" size="large">
                         <DriveFileRenameOutlineIcon />
                       </IconButton>

@@ -1,8 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slices/auth";
+import utilsReducer from "./slices/utils";
+import contactReducer from "./slices/contact";
+import educationReducer from "./slices/education";
+import experienceReducer from "./slices/experience";
+import messageReducer from "./slices/message";
+import socialReducer from "./slices/social";
 
 const reducer = {
   auth: authReducer,
+  utils: utilsReducer,
+  contact: contactReducer,
+  education: educationReducer,
+  experience: experienceReducer,
+  message: messageReducer,
+  social: socialReducer,
 };
 
 const store = configureStore({
