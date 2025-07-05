@@ -4,6 +4,41 @@ import socialService from "../services/contact.service";
 import initialState from "../initialStore/contact";
 import { ContactPayload } from "../interfaces/contact";
 
+export const getMyContacts = createAsyncThunk<
+  any,
+  any,
+  { rejectValue: string }
+>("contact/getMyContacts", async (data = "", thunkAPI) => {
+  try {
+    const response = await socialService.getMyContacts();
+    thunkAPI.dispatch(replaceContact(response));
+    return response;
+  } catch (error: any) {
+    console.log(error);
+
+    const errors = error?.response?.data;
+
+    let message = "Une erreur est survenue";
+
+    if (errors && typeof errors === "object") {
+      // Concatène tous les messages d'erreur (ex: password, email, etc.)
+      message = Object.entries(errors)
+        .map(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            return messages.join(" ");
+          }
+          return messages; // fallback si ce n’est pas un tableau
+        })
+        .join(" ");
+    } else {
+      // Fallback si ce n’est pas un objet structuré
+      message = error.message || error.toString();
+    }
+
+    thunkAPI.dispatch(setMessage(message));
+    return thunkAPI.rejectWithValue(message);
+  }
+});
 
 export const getContacts = createAsyncThunk<
   any,
@@ -15,8 +50,27 @@ export const getContacts = createAsyncThunk<
     thunkAPI.dispatch(replaceContact(response));
     return response;
   } catch (error: any) {
-    const message =
-      error?.response?.message || error.message || error.toString();
+    console.log(error);
+
+    const errors = error?.response?.data;
+
+    let message = "Une erreur est survenue";
+
+    if (errors && typeof errors === "object") {
+      // Concatène tous les messages d'erreur (ex: password, email, etc.)
+      message = Object.entries(errors)
+        .map(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            return messages.join(" ");
+          }
+          return messages; // fallback si ce n’est pas un tableau
+        })
+        .join(" ");
+    } else {
+      // Fallback si ce n’est pas un objet structuré
+      message = error.message || error.toString();
+    }
+
     thunkAPI.dispatch(setMessage(message));
     return thunkAPI.rejectWithValue(message);
   }

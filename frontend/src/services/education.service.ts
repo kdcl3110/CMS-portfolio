@@ -19,6 +19,12 @@ const getEducations = async (userId: number) => {
   });
 };
 
+const getMyEducations = async () => {
+  return api.get(`/educations/my-educations/`).then((response: any) => {
+    return response.data;
+  });
+};
+
 const deleteEducation = async (userId: number) => {
   return api.delete(`/educations/${userId}/`).then((response: any) => {
     return response.data;
@@ -30,5 +36,6 @@ const educationService = {
   updateEducation,
   getEducations,
   deleteEducation,
+  getMyEducations
 };
 export default educationService;

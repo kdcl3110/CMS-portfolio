@@ -1,7 +1,7 @@
 import api from "./api";
 
 const getSocialTypes = async () => {
-  return api.get(`/social_types/`).then((response: any) => {
+  return api.get(`/social-types/`).then((response: any) => {
     return response.data;
   });
 };

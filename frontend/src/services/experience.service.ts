@@ -19,6 +19,12 @@ const getExperiences = async (userId: number) => {
   });
 };
 
+const getMyExperiences = async () => {
+  return api.get(`/experiences/my-experiences/`).then((response: any) => {
+    return response.data;
+  });
+};
+
 const deleteExperience = async (userId: number) => {
   return api.delete(`/experiences/${userId}/`).then((response: any) => {
     return response.data;
@@ -30,5 +36,6 @@ const ExperienceService = {
   updateExperience,
   getExperiences,
   deleteExperience,
+  getMyExperiences
 };
 export default ExperienceService;

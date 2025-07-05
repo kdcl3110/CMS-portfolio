@@ -6,6 +6,7 @@ import educationReducer from "./slices/education";
 import experienceReducer from "./slices/experience";
 import messageReducer from "./slices/message";
 import socialReducer from "./slices/social";
+import skillReducer from "./slices/skill";
 
 const reducer = {
   auth: authReducer,
@@ -15,6 +16,7 @@ const reducer = {
   experience: experienceReducer,
   message: messageReducer,
   social: socialReducer,
+  skill: skillReducer
 };
 
 const store = configureStore({

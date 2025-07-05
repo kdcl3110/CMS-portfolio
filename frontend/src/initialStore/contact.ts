@@ -3,6 +3,7 @@ interface Contact {
   name: string;
   email: string;
   user: string;
+  status: boolean;
   message: string;
   created_at: string;
   updated_at: string;

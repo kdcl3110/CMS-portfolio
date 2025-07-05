@@ -4,13 +4,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { replaceCurrentUser, replaceIsLoggedIn } from "./slices/auth";
 import { AppDispatch, RootState } from "./store";
 import { getCategories, getSocialTypes } from "./slices/utils";
+import { getMyContacts } from "./slices/contact";
+import { getMySkills, getSkills } from "./slices/skill";
+import { getMySocials } from "./slices/social";
+import { getMyExperiences } from "./slices/experience";
+import { getMyEducations } from "./slices/education";
 
 interface InitProps {
   children: React.ReactNode;
 }
 
 const Init: React.FC<InitProps> = ({ children }) => {
-
   const { currentUser, isLoggedIn } = useSelector(
     (state: RootState) => state.auth
   );
@@ -19,10 +23,10 @@ const Init: React.FC<InitProps> = ({ children }) => {
 
   useEffect(() => {
     if (localStorage.getItem("user")) {
-      if (JSON.stringify(currentUser)?.id == null) {
+      if (!currentUser.id) {
         const user = JSON.parse(localStorage.getItem("user") || "{}");
         console.log("User from localStorage:", user);
-        
+
         dispatch(replaceCurrentUser(user));
         dispatch(replaceIsLoggedIn(true));
       }
@@ -31,8 +35,13 @@ const Init: React.FC<InitProps> = ({ children }) => {
 
   useEffect(() => {
     if (currentUser?.id) {
-      dispatch(getSocialTypes(currentUser));
-      dispatch(getCategories(currentUser));
+      dispatch(getSocialTypes(""));
+      dispatch(getCategories(""));
+      dispatch(getMyContacts(""));
+      dispatch(getMySocials(""));
+      dispatch(getMyExperiences(""));
+      dispatch(getMyEducations(""));
+      dispatch(getMySkills(""));
     }
   }, [currentUser]);
 

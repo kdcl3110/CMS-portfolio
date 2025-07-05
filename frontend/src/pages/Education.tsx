@@ -15,115 +15,64 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import Badge from "../components/ui/badge/Badge";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-
-interface Order {
-  id: number;
-  user: {
-    image: string;
-    name: string;
-    role: string;
-  };
-  projectName: string;
-  team: {
-    images: string[];
-  };
-  status: string;
-  budget: string;
-}
-
-// Define the table data using the interface
-const tableData: Order[] = [
-  {
-    id: 1,
-    user: {
-      image: "/images/user/user-17.jpg",
-      name: "Lindsey Curtis",
-      role: "Web Designer",
-    },
-    projectName: "Agency Website",
-    team: {
-      images: [
-        "/images/user/user-22.jpg",
-        "/images/user/user-23.jpg",
-        "/images/user/user-24.jpg",
-      ],
-    },
-    budget: "3.9K",
-    status: "Active",
-  },
-  {
-    id: 2,
-    user: {
-      image: "/images/user/user-18.jpg",
-      name: "Kaiya George",
-      role: "Project Manager",
-    },
-    projectName: "Technology",
-    team: {
-      images: ["/images/user/user-25.jpg", "/images/user/user-26.jpg"],
-    },
-    budget: "24.9K",
-    status: "Pending",
-  },
-  {
-    id: 3,
-    user: {
-      image: "/images/user/user-17.jpg",
-      name: "Zain Geidt",
-      role: "Content Writing",
-    },
-    projectName: "Blog Writing",
-    team: {
-      images: ["/images/user/user-27.jpg"],
-    },
-    budget: "12.7K",
-    status: "Active",
-  },
-  {
-    id: 4,
-    user: {
-      image: "/images/user/user-20.jpg",
-      name: "Abram Schleifer",
-      role: "Digital Marketer",
-    },
-    projectName: "Social Media",
-    team: {
-      images: [
-        "/images/user/user-28.jpg",
-        "/images/user/user-29.jpg",
-        "/images/user/user-30.jpg",
-      ],
-    },
-    budget: "2.8K",
-    status: "Cancel",
-  },
-  {
-    id: 5,
-    user: {
-      image: "/images/user/user-21.jpg",
-      name: "Carla George",
-      role: "Front-end Developer",
-    },
-    projectName: "Website",
-    team: {
-      images: [
-        "/images/user/user-31.jpg",
-        "/images/user/user-32.jpg",
-        "/images/user/user-33.jpg",
-      ],
-    },
-    budget: "4.5K",
-    status: "Active",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store";
+import NoData from "../components/NoData";
+import * as Yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { showError, showSucces } from "../components/Toasts";
+import { EducationFormPayload } from "../interfaces/education";
+import { createEducation, getMyEducations } from "../slices/education";
+import format_date from "../utils/format_date";
 
 const Education: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {};
+  const validationSchema = Yup.object().shape({
+    school: Yup.string().required("Entrer le nom de l'entreprise").trim(),
+    start_date: Yup.string().required("Entrer la date de début").trim(),
+    description: Yup.string().trim(),
+    end_date: Yup.string().trim(),
+  });
+
+  const {
+    // register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    mode: "onBlur",
+    resolver: yupResolver(validationSchema),
+  });
+
   const { isOpen, openModal, closeModal } = useModal();
+  const { educations } = useSelector((state: RootState) => state.education);
+  const { currentUser } = useSelector((state: RootState) => state.auth);
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const newEducation = (data: any) => {
+    const params: EducationFormPayload = {
+      school: data.school,
+      description: data.description,
+      start_date: data.start_date,
+      end_date: data.end_date,
+      user: currentUser.id,
+    };
+
+    dispatch(createEducation(params))
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        
+        closeModal();
+        showSucces("Opération réussie");
+        dispatch(getMyEducations(""));
+      })
+      .catch((err) => showError(err));
+  };
 
   return (
     <>
@@ -131,7 +80,7 @@ const Education: React.FC = () => {
       <ModalComponent
         isOpen={isOpen}
         onClose={closeModal}
-        action={handleSubmit}
+        action={handleSubmit(newEducation)}
         title="Ajouter une education"
         description="Veuillez remplir les informations suivantes pour ajouter une nouvelle education."
       >
@@ -141,6 +90,8 @@ const Education: React.FC = () => {
             label="Etablissement"
             size="small"
             variant="outlined"
+            onChange={(e) => setValue("school", e.target.value)}
+            error={errors.school != null}
             fullWidth
             required
           />
@@ -152,6 +103,8 @@ const Education: React.FC = () => {
                 size="small"
                 type="date"
                 variant="outlined"
+                onChange={(e) => setValue("start_date", e.target.value)}
+                error={errors.start_date != null}
                 fullWidth
                 required
               />
@@ -164,6 +117,8 @@ const Education: React.FC = () => {
                 size="small"
                 type="date"
                 variant="outlined"
+                onChange={(e) => setValue("end_date", e.target.value)}
+                error={errors.end_date != null}
                 fullWidth
               />
             </FormControl>
@@ -180,8 +135,10 @@ const Education: React.FC = () => {
                 id="outlined-multiline-static"
                 label="description"
                 multiline
+                onChange={(e) => setValue("description", e.target.value)}
                 rows={4}
                 variant="outlined"
+                error={errors.description != null}
               />
             </FormControl>
           </Box>
@@ -236,62 +193,19 @@ const Education: React.FC = () => {
 
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {tableData.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <img
-                          width={40}
-                          height={40}
-                          src={order.user.image}
-                          alt={order.user.name}
-                        />
-                      </div>
-                      <div>
-                        <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                          {order.user.name}
-                        </span>
-                        <span className="block text-gray-500 text-theme-xs dark:text-gray-400">
-                          {order.user.role}
-                        </span>
-                      </div>
-                    </div>
+              {educations.map((education) => (
+                <TableRow key={education.id}>
+                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                    {education.school}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {order.projectName}
+                    {format_date(education.start_date, "ll")}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex -space-x-2">
-                      {order.team.images.map((teamImage, index) => (
-                        <div
-                          key={index}
-                          className="w-6 h-6 overflow-hidden border-2 border-white rounded-full dark:border-gray-900"
-                        >
-                          <img
-                            width={24}
-                            height={24}
-                            src={teamImage}
-                            alt={`Team member ${index + 1}`}
-                            className="w-full size-6"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                    {format_date(education.end_date, "ll")}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <Badge
-                      size="sm"
-                      color={
-                        order.status === "Active"
-                          ? "success"
-                          : order.status === "Pending"
-                          ? "warning"
-                          : "error"
-                      }
-                    >
-                      {order.status}
-                    </Badge>
+                    {education.description}
                   </TableCell>
                   <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                     <div className="flex items-center space-x-2">
@@ -312,6 +226,7 @@ const Education: React.FC = () => {
               ))}
             </TableBody>
           </Table>
+          <NoData show={educations.length == 0} />
         </div>
       </Container>
     </>

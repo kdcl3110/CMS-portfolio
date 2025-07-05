@@ -7,7 +7,7 @@ export const getCategories = createAsyncThunk<
   any,
   any,
   { rejectValue: string }
->("utils/getCategories", async (data, thunkAPI) => {
+>("utils/getCategories", async (data = "", thunkAPI) => {
   try {
     const response = await UtilsService.getCategories();
     thunkAPI.dispatch(replaceCategories(response));
@@ -24,7 +24,7 @@ export const getSocialTypes = createAsyncThunk<
   any,
   any,
   { rejectValue: string }
->("utils/getSocialTypes", async (data, thunkAPI) => {
+>("utils/getSocialTypes", async (data = "", thunkAPI) => {
   try {
     const response = await UtilsService.getSocialTypes();
     thunkAPI.dispatch(replaceSocialType(response));

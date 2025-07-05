@@ -8,7 +8,7 @@ import clsx from "clsx";
 interface UploadCardProps {
   width?: string; // ex: w-28, w-40
   height?: string; // ex: h-28, h-40
-  onFileSelect: (file: File | null) => void;
+  onFileSelect: (file: File | null) => any;
   url?: string | null; // Optional URL for displaying an image
 }
 
@@ -37,9 +37,7 @@ const UploadCard: React.FC<UploadCardProps> = ({
     }
   };
 
-  const handleRemove = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const handleRemove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation(); // Empêche l'ouverture du file picker
     setPreview(null);
     if (inputRef.current) inputRef.current.value = "";
@@ -55,7 +53,7 @@ const UploadCard: React.FC<UploadCardProps> = ({
       )}
       onClick={handleClick}
     >
-      {preview ? (
+      {preview != null && preview != "" ? (
         <>
           <img
             src={preview}

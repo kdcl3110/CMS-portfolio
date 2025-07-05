@@ -21,9 +21,16 @@ const deleteContact = async (contactId: number) => {
   });
 };
 
+const getMyContacts = async () => {
+  return api.get(`/contacts/my-contacts/`).then((response: any) => {
+    return response.data;
+  });
+};
+
 const contactService = {
   updateContact,
   getContacts,
   deleteContact,
+  getMyContacts
 };
 export default contactService;

@@ -102,13 +102,13 @@ axios.interceptors.response.use(
         localStorage.removeItem("@Auth:token");
         localStorage.removeItem("@Auth:refresh");
         localStorage.removeItem("user");
-        window.location.href = "/login"; // Ou utilisez votre système de navigation
+        window.location.href = "/signin"; // Ou utilisez votre système de navigation
         return Promise.reject(error);
       }
 
       try {
         // Appel à l'endpoint de refresh
-        const response: AxiosResponse<RefreshTokenResponse> = await axios.post("/api/token/refresh/", {
+        const response: AxiosResponse<RefreshTokenResponse> = await axios.post("api/token/refresh/", {
           refresh: refreshToken
         });
 
@@ -132,6 +132,8 @@ axios.interceptors.response.use(
 
       } catch (refreshError) {
         // Échec du refresh, déconnecter l'utilisateur
+        console.log("Refresh token error:", refreshError);
+        
         processQueue(refreshError, null);
         isRefreshing = false;
 

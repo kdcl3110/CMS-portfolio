@@ -3,7 +3,6 @@ import {
   RegisterPayload,
   ResetPasswordConfirmPayload,
   ResetPasswordPayload,
-  UpdateUserPayload,
 } from "../interfaces/auth";
 import api from "./api";
 
@@ -40,8 +39,18 @@ const logout = async () => {
   }
 };
 
-const editProfil = async (data: UpdateUserPayload) => {
-  return api.put("/auth/profil/update/", data).then((response: any) => {
+const editProfil = async (data: any) => {
+  return api
+    .put("/auth/profile/update-profile/", data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+    .then((response: any) => {
+      return response.data;
+    });
+};
+
+const getCurrentUser = async () => {
+  return api.get("/auth/current-user/").then((response: any) => {
     return response.data;
   });
 };
@@ -74,5 +83,6 @@ const authService = {
   resetPassword,
   viewProfil,
   resetPasswordConfirmation,
+  getCurrentUser,
 };
 export default authService;

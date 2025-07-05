@@ -1,11 +1,6 @@
+import { User } from "../interfaces/auth";
+
 export default {
-  currentUser: {
-    id: null,
-    username: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-  },
+  currentUser: {} as User,
   isLoggedIn: false,
-  socket: null,
 };

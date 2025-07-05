@@ -1,5 +1,5 @@
 export interface SocialPayload {
-  socialType: string;
-  url: string;
+  social_type: number;
+  link: string;
   user?: number;
 }

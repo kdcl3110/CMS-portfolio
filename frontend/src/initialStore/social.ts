@@ -1,10 +1,11 @@
 import { SocialType } from "./utils";
 
-
 interface Social {
   id: number;
-  socialType: SocialType;
-  user: string;
+  socialType: number;
+  social_type_detail: SocialType
+  user: number;
+  link: string;
   created_at: string;
   updated_at: string;
 }

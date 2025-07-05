@@ -8,15 +8,19 @@ const createSkill = async (data: SkillPayload) => {
 };
 
 const updateSkill = async (id: number, data: SkillPayload) => {
-  return api
-    .put(`/skills/${id}/`, data)
-    .then((response: any) => {
-      return response.data;
-    });
+  return api.put(`/skills/${id}/`, data).then((response: any) => {
+    return response.data;
+  });
 };
 
 const getSkills = async (userId: number) => {
   return api.get(`/skills/${userId}/`).then((response: any) => {
+    return response.data;
+  });
+};
+
+const getMySkills = async () => {
+  return api.get(`/skills/my-skills/`).then((response: any) => {
     return response.data;
   });
 };
@@ -32,5 +36,6 @@ const skillService = {
   getSkills,
   deleteSkill,
   createSkill,
+  getMySkills
 };
 export default skillService;

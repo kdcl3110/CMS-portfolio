@@ -19,6 +19,12 @@ const getSocials = async (userId: number) => {
   });
 };
 
+const getMySocials = async () => {
+  return api.get(`/socials/my-socials/`).then((response: any) => {
+    return response.data;
+  });
+};
+
 const deleteSocial = async (userId: number) => {
   return api.delete(`/socials/${userId}/`).then((response: any) => {
     return response.data;
@@ -30,5 +36,6 @@ const SocialService = {
   updateSocial,
   getSocials,
   deleteSocial,
+  getMySocials,
 };
 export default SocialService;

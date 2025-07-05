@@ -6,7 +6,8 @@ interface Category {
 }
 export interface SocialType {
   id: number;
-  name: string;
+  label: string;
+  logo_url: string;
   created_at: string;
   updated_at: string;
 }

@@ -31,3 +31,24 @@ export interface ResetPasswordConfirmPayload {
   password: string;
   password_confirm: string;
 }
+
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  profile_image_url?: string;
+  banner_url: string;
+  created_at: string;
+  updated_at: string;
+  country: string;
+  city: string;
+  postal_code: string;
+  street: string;
+  phone_number: string;
+  house_number: string;
+  full_name: string;
+  full_adresse: string;
+  bio: string;
+}
