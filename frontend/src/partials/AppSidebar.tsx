@@ -11,21 +11,10 @@ import PublicIcon from "@mui/icons-material/Public";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
 // Assume these icons are imported from an icon library
 import {
-  BoxCubeIcon,
-  CalenderIcon,
   ChevronDownIcon,
-  GridIcon,
   HorizontaLDots,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
-  UserCircleIcon,
-  PlusIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import SidebarWidget from "./SidebarWidget";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 

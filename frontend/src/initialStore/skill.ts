@@ -1,10 +1,4 @@
-interface Skill {
-  id: number;
-  label: string;
-  user: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Skill } from "../interfaces/skill";
 
 export default {
   skills: [] as Skill[],

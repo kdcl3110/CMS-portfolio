@@ -1,27 +1,25 @@
 import React, { useState } from "react";
-import PageBreadcrumb from "../components/common/PageBreadCrumb";
-import Container from "../components/Container";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Container from "../../components/Container";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useModal } from "../hooks/useModal";
-import ModalComponent from "../components/ModalComponent";
+import { useModal } from "../../hooks/useModal";
+import ModalComponent from "../../components/ModalComponent";
 import CheckIcon from "@mui/icons-material/Check";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import {
   Table,
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
-import IconButton from "@mui/material/IconButton";
+} from "../../components/ui/table";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import { createSocials, getMySocials } from "../slices/social";
-import { showError, showSucces } from "../components/Toasts";
-import { SocialPayload } from "../interfaces/social";
-import NoData from "../components/NoData";
+import { AppDispatch, RootState } from "../../store";
+import { createSocials, getMySocials } from "../../slices/social";
+import { showError, showSucces } from "../../components/Toasts";
+import { SocialPayload } from "../../interfaces/social";
+import NoData from "../../components/NoData";
+import SocialTabItem from "./SocialTabItem";
 
 const Social: React.FC = () => {
   const { socialTypes } = useSelector((state: RootState) => state.utils);
@@ -37,7 +35,12 @@ const Social: React.FC = () => {
     logo?: string;
   } | null>(socialTypes[0] || null);
 
-  const { isOpen, openModal, closeModal } = useModal();
+  const {
+    isOpen,
+    openModal,
+    closeModal,
+  } = useModal();
+
   const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = () => {
@@ -53,7 +56,7 @@ const Social: React.FC = () => {
           .unwrap()
           .then((res) => {
             console.log(res);
-            
+
             closeModal();
             setError("");
             showSucces("Opération réussie");
@@ -170,39 +173,7 @@ const Social: React.FC = () => {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {socials.map((social) => (
-                <TableRow key={social?.id}>
-                  <TableCell className="px-5 py-4 sm:px-6 text-start">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 overflow-hidden rounded-full">
-                        <img
-                          width={40}
-                          height={40}
-                          src={social.social_type_detail?.logo_url}
-                          alt={social.link}
-                        />
-                      </div>
-                    </div>
-                  </TableCell>
-
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {social.link}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center space-x-2">
-                      <IconButton color="info" aria-label="delete" size="large">
-                        <DriveFileRenameOutlineIcon />
-                      </IconButton>
-
-                      <IconButton
-                        color="error"
-                        aria-label="delete"
-                        size="large"
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                <SocialTabItem social={social} key={social?.id} />
               ))}
             </TableBody>
           </Table>

@@ -1,15 +1,14 @@
-import { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import SignInSide from "./pages/signin/SignInSide";
 import SignUp from "./pages/signup/SignUp";
 import AppLayout from "./partials/AppLayout";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import Personal from "./pages/Personal";
-import Experience from "./pages/Experience";
-import Education from "./pages/Education";
-import Competence from "./pages/Competence";
-import Social from "./pages/Social";
+import Experience from "./pages/experience/Experience";
+import Education from "./pages/education/Education";
+import Competence from "./pages/competence/Competence";
+import Social from "./pages/social/Social";
 import Article from "./pages/Article";
 import Contact from "./pages/Contact";
 

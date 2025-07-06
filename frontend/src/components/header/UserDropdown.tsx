@@ -1,24 +1,15 @@
-import { forwardRef, use, useState } from "react";
+import { useState } from "react";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { AppDispatch, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import Button from "@mui/material/Button";
-import DialogActions from "@mui/material/DialogActions";
-import { TransitionProps } from "@mui/material/transitions";
-import Slide from "@mui/material/Slide";
 import { logout } from "../../slices/auth";
 import { showError, showSucces } from "../Toasts";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { currentUser } = useSelector((state: RootState) => state.auth);
-  const [dialogOpen, setDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -35,15 +26,6 @@ export default function UserDropdown() {
       });
   };
 
-  const Transition = forwardRef(function Transition(
-    props: TransitionProps & {
-      children: React.ReactElement<any, any>;
-    },
-    ref: React.Ref<unknown>
-  ) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
-
   function toggleDropdown() {
     setIsOpen(!isOpen);
   }
@@ -52,42 +34,8 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-  };
-
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
   return (
     <div className="relative">
-      <Dialog
-        open={dialogOpen}
-        slots={{
-          transition: Transition,
-        }}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Attention"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Vous allez vous déconnecter de votre compte. Êtes-vous sûr de
-            vouloir continuer ?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button color="error" onClick={handleClose}>
-            Annuler
-          </Button>
-          <Button color="success" onClick={handleSignOut}>
-            Valider
-          </Button>
-        </DialogActions>
-      </Dialog>
-
       <button
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
@@ -166,11 +114,12 @@ export default function UserDropdown() {
             </DropdownItem>
           </li>
         </ul>
+
         <a
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
           onClick={(e) => {
             e.preventDefault();
-            handleClickOpen();
+            handleSignOut();
           }}
         >
           <svg

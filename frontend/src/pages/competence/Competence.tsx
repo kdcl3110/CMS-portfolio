@@ -1,29 +1,27 @@
 import React from "react";
-import PageBreadcrumb from "../components/common/PageBreadCrumb";
-import Container from "../components/Container";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Container from "../../components/Container";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import ModalComponent from "../components/ModalComponent";
+import ModalComponent from "../../components/ModalComponent";
 import {
   Table,
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
-import { useModal } from "../hooks/useModal";
-import IconButton from "@mui/material/IconButton";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
-import { AppDispatch, RootState } from "../store";
+} from "../../components/ui/table";
+import { useModal } from "../../hooks/useModal";
+import { AppDispatch, RootState } from "../../store";
 import { useDispatch, useSelector } from "react-redux";
-import NoData from "../components/NoData";
+import NoData from "../../components/NoData";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { SkillPayload } from "../interfaces/skill";
-import { createSkill, getMySkills } from "../slices/skill";
-import { showError, showSucces } from "../components/Toasts";
+import { SkillPayload } from "../../interfaces/skill";
+import { createSkill, getMySkills } from "../../slices/skill";
+import { showError, showSucces } from "../../components/Toasts";
+import CompetenceTabItem from "./CompetenceTabItem";
 
 const Competence: React.FC = () => {
   const validationSchema = Yup.object().shape({
@@ -119,26 +117,7 @@ const Competence: React.FC = () => {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {skills.map((skill) => (
-                <TableRow key={skill.id}>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {skill.label}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center space-x-2">
-                      <IconButton color="info" aria-label="delete" size="large">
-                        <DriveFileRenameOutlineIcon />
-                      </IconButton>
-
-                      <IconButton
-                        color="error"
-                        aria-label="delete"
-                        size="large"
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                <CompetenceTabItem key={skill.id} skill={skill} />
               ))}
             </TableBody>
           </Table>

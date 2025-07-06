@@ -1,12 +1,12 @@
 import React from "react";
-import PageBreadcrumb from "../components/common/PageBreadCrumb";
-import Container from "../components/Container";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Container from "../../components/Container";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useModal } from "../hooks/useModal";
-import ModalComponent from "../components/ModalComponent";
+import { useModal } from "../../hooks/useModal";
+import ModalComponent from "../../components/ModalComponent";
 import FormLabel from "@mui/material/FormLabel";
 import {
   Table,
@@ -14,20 +14,21 @@ import {
   TableCell,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
+} from "../../components/ui/table";
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import NoData from "../components/NoData";
+import { AppDispatch, RootState } from "../../store";
+import NoData from "../../components/NoData";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { createExperience, getMyExperiences } from "../slices/experience";
-import { ExperienceFormPayload } from "../interfaces/experience";
-import { showError, showSucces } from "../components/Toasts";
-import format_date from "../utils/format_date";
+import { createExperience, getMyExperiences } from "../../slices/experience";
+import { ExperienceFormPayload } from "../../interfaces/experience";
+import { showError, showSucces } from "../../components/Toasts";
+import format_date from "../../utils/format_date";
+import ExperienceTabItem from "./ExperienceTabItem";
 
 const Experience: React.FC = () => {
   const validationSchema = Yup.object().shape({
@@ -66,7 +67,7 @@ const Experience: React.FC = () => {
       .unwrap()
       .then((res) => {
         console.log(res);
-        
+
         closeModal();
         showSucces("Opération réussie");
         dispatch(getMyExperiences(""));
@@ -194,35 +195,10 @@ const Experience: React.FC = () => {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {experiences.map((experience) => (
-                <TableRow key={experience.id}>
-                  <TableCell className="px-4 py-3 text-gray-800 text-start font-bold text-theme-sm dark:text-gray-400">
-                    {experience.company}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {format_date(experience.start_date, "ll")}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {format_date(experience.end_date, "ll")}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {experience.description}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center space-x-2">
-                      <IconButton color="info" aria-label="delete" size="large">
-                        <DriveFileRenameOutlineIcon />
-                      </IconButton>
-
-                      <IconButton
-                        color="error"
-                        aria-label="delete"
-                        size="large"
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                <ExperienceTabItem
+                  experience={experience}
+                  key={experience.id}
+                />
               ))}
             </TableBody>
           </Table>

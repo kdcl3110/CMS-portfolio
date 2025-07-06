@@ -1,13 +1,5 @@
-interface Education {
-  id: number;
-  school: string;
-  description: string;
-  start_date: string;
-  end_date: string;
-  user: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Education } from "../interfaces/education";
+
 
 export default {
   educations: [] as Education[],

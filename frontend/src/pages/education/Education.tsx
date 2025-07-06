@@ -1,37 +1,34 @@
 import React from "react";
-import PageBreadcrumb from "../components/common/PageBreadCrumb";
-import Container from "../components/Container";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import Container from "../../components/Container";
 import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import FormLabel from "@mui/material/FormLabel";
-import ModalComponent from "../components/ModalComponent";
-import { useModal } from "../hooks/useModal";
+import ModalComponent from "../../components/ModalComponent";
+import { useModal } from "../../hooks/useModal";
 import {
   Table,
   TableBody,
   TableCell,
   TableHeader,
   TableRow,
-} from "../components/ui/table";
-import IconButton from "@mui/material/IconButton";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
+} from "../../components/ui/table";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store";
-import NoData from "../components/NoData";
+import { AppDispatch, RootState } from "../../store";
+import NoData from "../../components/NoData";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { showError, showSucces } from "../components/Toasts";
-import { EducationFormPayload } from "../interfaces/education";
-import { createEducation, getMyEducations } from "../slices/education";
-import format_date from "../utils/format_date";
+import { showError, showSucces } from "../../components/Toasts";
+import { EducationFormPayload } from "../../interfaces/education";
+import { createEducation, getMyEducations } from "../../slices/education";
+import EducationTabItem from "./EducationTabItem";
 
 const Education: React.FC = () => {
   const validationSchema = Yup.object().shape({
-    school: Yup.string().required("Entrer le nom de l'entreprise").trim(),
+    school: Yup.string().required("Entrer le nom de l'établissement").trim(),
     start_date: Yup.string().required("Entrer la date de début").trim(),
     description: Yup.string().trim(),
     end_date: Yup.string().trim(),
@@ -66,7 +63,7 @@ const Education: React.FC = () => {
       .unwrap()
       .then((res) => {
         console.log(res);
-        
+
         closeModal();
         showSucces("Opération réussie");
         dispatch(getMyEducations(""));
@@ -194,35 +191,7 @@ const Education: React.FC = () => {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {educations.map((education) => (
-                <TableRow key={education.id}>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {education.school}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {format_date(education.start_date, "ll")}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {format_date(education.end_date, "ll")}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {education.description}
-                  </TableCell>
-                  <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    <div className="flex items-center space-x-2">
-                      <IconButton color="info" aria-label="delete" size="large">
-                        <DriveFileRenameOutlineIcon />
-                      </IconButton>
-
-                      <IconButton
-                        color="error"
-                        aria-label="delete"
-                        size="large"
-                      >
-                        <DeleteOutlineIcon />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                </TableRow>
+                <EducationTabItem education={education} key={education.id} />
               ))}
             </TableBody>
           </Table>
