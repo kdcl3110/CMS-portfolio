@@ -10,3 +10,4 @@ class Contact(TimeStampedModel):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     message = models.TextField()
+    read = models.BooleanField(default=False)

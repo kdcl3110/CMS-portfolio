@@ -28,12 +28,15 @@ urlpatterns = [
     path('auth/register/', SignupView.as_view(), name='register'),
     path('auth/login/', SigninView.as_view(), name='login'),
     path('auth/logout/', LogoutView.as_view(), name='logout'),
+    path('auth/current-user/', CurrentUserView.as_view(), name='current-user'),
     
     # Réinitialisation de mot de passe
     path('auth/password-reset/', ResetPasswordView.as_view(), name='password_reset_request'),
     path('auth/password-reset/confirm/', ResetPasswordConfirmView.as_view(), name='password_reset_confirm'),
     
     # Profil utilisateur
-    path('auth/profile/',CurrentUserView.as_view(), name='profile'),
-    path('auth/profile/update/', UpdateProfilView.as_view(), name='update_profile'),
+    path('auth/current-user/',CurrentUserView.as_view(), name='profile'),
+    path('auth/profile/update-profile/', UpdateProfilView.as_view(), name='update_profile'),
+    
+
 ]
