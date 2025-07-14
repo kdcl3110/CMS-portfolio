@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from ..models.experience import Experience
 from ..models.user import User
@@ -23,6 +23,19 @@ class ExperienceViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Associe automatiquement l'expérience à l'utilisateur connecté"""
         serializer.save(user=self.request.user)
+        
+    def get_permissions(self):
+        """
+        Définir des permissions spécifiques selon l'action
+        """
+        if self.action == 'experiences_by_user':
+            # Accès public pour consulter les formations d'un utilisateur
+            permission_classes = [AllowAny]
+        else:
+            # Authentification requise pour toutes les autres actions
+            permission_classes = [IsAuthenticated]
+        
+        return [permission() for permission in permission_classes]
 
     @action(detail=False, methods=['get'], url_path='user/(?P<user_id>[^/.]+)')
     def experiences_by_user(self, request, user_id=None):

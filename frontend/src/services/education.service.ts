@@ -14,7 +14,7 @@ const updateEducation = async (id: number, data: EducationFormPayload) => {
 };
 
 const getEducations = async (userId: number) => {
-  return api.get(`/educations/${userId}/`).then((response: any) => {
+  return api.get(`/educations/user/${userId}/`).then((response: any) => {
     return response.data;
   });
 };

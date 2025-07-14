@@ -9,6 +9,8 @@ from .category_urls import urlpatterns as category_urls
 from .article_urls import urlpatterns as article_urls
 from .skill_urls import urlpatterns as skill_urls
 from .social_type_urls import urlpatterns as social_type_urls
+from .project_urls import urlpatterns as project_urls
+from .service_urls import urlpatterns as service_urls
 from ..views.auth_view import (SignupView, CurrentUserView, SigninView,
     ResetPasswordView, ResetPasswordConfirmView, LogoutView, UpdateProfilView)
 
@@ -23,6 +25,8 @@ urlpatterns = [
     path('', include(article_urls)),
     path('', include(skill_urls)),
     path('', include(social_type_urls)),
+    path('', include(project_urls)),
+    path('', include(service_urls)),
     
     # Authentification
     path('auth/register/', SignupView.as_view(), name='register'),

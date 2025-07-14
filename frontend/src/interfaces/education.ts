@@ -1,5 +1,6 @@
 export interface Education {
   id: number;
+  title: string;
   school: string;
   description: string;
   start_date: string;
@@ -14,5 +15,6 @@ export interface EducationFormPayload {
   start_date: string;
   end_date: string;
   description?: string;
+  title: string;
   [key: string]: any;
 }

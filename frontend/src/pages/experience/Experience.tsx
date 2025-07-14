@@ -15,9 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import IconButton from "@mui/material/IconButton";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store";
 import NoData from "../../components/NoData";
@@ -27,11 +24,11 @@ import { useForm } from "react-hook-form";
 import { createExperience, getMyExperiences } from "../../slices/experience";
 import { ExperienceFormPayload } from "../../interfaces/experience";
 import { showError, showSucces } from "../../components/Toasts";
-import format_date from "../../utils/format_date";
 import ExperienceTabItem from "./ExperienceTabItem";
 
 const Experience: React.FC = () => {
   const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Entrer l'intitulé du poste").trim(),
     company: Yup.string().required("Entrer le nom de l'entreprise").trim(),
     start_date: Yup.string().required("Entrer la date de début").trim(),
     description: Yup.string().trim(),
@@ -60,14 +57,14 @@ const Experience: React.FC = () => {
       description: data.description,
       start_date: data.start_date,
       end_date: data.end_date,
+      title: data.title,
       user: currentUser.id,
     };
 
     dispatch(createExperience(params))
       .unwrap()
-      .then((res) => {
+      .then((res) => { 
         console.log(res);
-
         closeModal();
         showSucces("Opération réussie");
         dispatch(getMyExperiences(""));
@@ -86,6 +83,16 @@ const Experience: React.FC = () => {
         description="Veuillez remplir les informations suivantes pour ajouter une nouvelle expérience professionnelle."
       >
         <div className="space-y-4">
+          <TextField
+            id="outlined-basic"
+            label="Intitulé"
+            size="small"
+            variant="outlined"
+            onChange={(e) => setValue("title", e.target.value)}
+            error={errors.title != null}
+            fullWidth
+            required
+          />
           <TextField
             id="outlined-basic"
             label="Entreprise"
@@ -163,19 +170,25 @@ const Experience: React.FC = () => {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Company
+                  Intitulé
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Start date
+                  Entreprise
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  End date
+                  Date de début
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Date de fin
                 </TableCell>
                 <TableCell
                   isHeader

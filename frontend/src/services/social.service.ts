@@ -14,7 +14,7 @@ const updateSocial = async (id: number, data: SocialPayload) => {
 };
 
 const getSocials = async (userId: number) => {
-  return api.get(`/socials/${userId}/`).then((response: any) => {
+  return api.get(`/socials/user/${userId}/`).then((response: any) => {
     return response.data;
   });
 };

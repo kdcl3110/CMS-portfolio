@@ -28,6 +28,7 @@ import EducationTabItem from "./EducationTabItem";
 
 const Education: React.FC = () => {
   const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Entrer l'intitulé de la formation'").trim(),
     school: Yup.string().required("Entrer le nom de l'établissement").trim(),
     start_date: Yup.string().required("Entrer la date de début").trim(),
     description: Yup.string().trim(),
@@ -57,6 +58,7 @@ const Education: React.FC = () => {
       start_date: data.start_date,
       end_date: data.end_date,
       user: currentUser.id,
+      title: data.title,
     };
 
     dispatch(createEducation(params))
@@ -82,6 +84,16 @@ const Education: React.FC = () => {
         description="Veuillez remplir les informations suivantes pour ajouter une nouvelle education."
       >
         <div className="space-y-4">
+          <TextField
+            id="outlined-basic"
+            label="Intitulé"
+            size="small"
+            variant="outlined"
+            onChange={(e) => setValue("title", e.target.value)}
+            error={errors.title != null}
+            fullWidth
+            required
+          />
           <TextField
             id="outlined-basic"
             label="Etablissement"
@@ -159,19 +171,25 @@ const Education: React.FC = () => {
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  School
+                  Intitulé
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  Start date
+                  2tablissement
                 </TableCell>
                 <TableCell
                   isHeader
                   className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
                 >
-                  End date
+                  Date de début
+                </TableCell>
+                <TableCell
+                  isHeader
+                  className="px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                >
+                  Date de fin
                 </TableCell>
                 <TableCell
                   isHeader

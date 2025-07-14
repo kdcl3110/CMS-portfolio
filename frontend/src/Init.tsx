@@ -9,6 +9,8 @@ import { getMySkills, getSkills } from "./slices/skill";
 import { getMySocials } from "./slices/social";
 import { getMyExperiences } from "./slices/experience";
 import { getMyEducations } from "./slices/education";
+import { getMyServices } from "./slices/service";
+import { getMyProjects } from "./slices/project";
 
 interface InitProps {
   children: React.ReactNode;
@@ -42,6 +44,8 @@ const Init: React.FC<InitProps> = ({ children }) => {
       dispatch(getMyExperiences(""));
       dispatch(getMyEducations(""));
       dispatch(getMySkills(""));
+      dispatch(getMyServices(""));
+      dispatch(getMyProjects(""));
     }
   }, [currentUser]);
 

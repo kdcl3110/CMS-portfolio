@@ -30,6 +30,7 @@ interface EducationTabItemProps {
 
 const EducationTabItem: React.FC<EducationTabItemProps> = ({ education }) => {
   const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Entrer l'intitulé de la formation").trim(),
     school: Yup.string().required("Entrer le nom de l'entreprise").trim(),
     start_date: Yup.string().required("Entrer la date de début").trim(),
     description: Yup.string().trim(),
@@ -54,6 +55,7 @@ const EducationTabItem: React.FC<EducationTabItemProps> = ({ education }) => {
   const { isOpen, openModal, closeModal } = useModal();
 
   useEffect(() => {
+    setValue("title", education.title);
     setValue("school", education.school);
     setValue("start_date", education.start_date);
     setValue("description", education.description);
@@ -66,6 +68,7 @@ const EducationTabItem: React.FC<EducationTabItemProps> = ({ education }) => {
       description: data.description,
       start_date: data.start_date,
       end_date: data.end_date,
+      title: data.title
       // user: currentUser.id,
     };
 
@@ -109,6 +112,17 @@ const EducationTabItem: React.FC<EducationTabItemProps> = ({ education }) => {
         description="Veuillez modifier les informations de la formation."
       >
         <div className="space-y-4">
+          <TextField
+            id="outlined-basic"
+            label="Intitulé"
+            size="small"
+            variant="outlined"
+            value={watchAllFields.title}
+            onChange={(e) => setValue("title", e.target.value)}
+            error={errors.title != null}
+            fullWidth
+            required
+          />
           <TextField
             id="outlined-basic"
             label="Etablissement"
@@ -174,6 +188,9 @@ const EducationTabItem: React.FC<EducationTabItemProps> = ({ education }) => {
       </ModalComponent>
 
       <TableRow>
+        <TableCell className="px-4 py-3 text-gray-800 font-bold text-start text-theme-sm dark:text-gray-400">
+          {education.title}
+        </TableCell>
         <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
           {education.school}
         </TableCell>

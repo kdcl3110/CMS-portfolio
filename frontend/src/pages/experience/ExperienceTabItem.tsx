@@ -32,6 +32,7 @@ const ExperienceTabItem: React.FC<ExperienceTabItemProps> = ({
   experience,
 }) => {
   const validationSchema = Yup.object().shape({
+    title: Yup.string().required("Entrer l'intitulé du poste").trim(),
     company: Yup.string().required("Entrer le nom de l'entreprise").trim(),
     start_date: Yup.string().required("Entrer la date de début").trim(),
     description: Yup.string().trim(),
@@ -55,6 +56,7 @@ const ExperienceTabItem: React.FC<ExperienceTabItemProps> = ({
   const { isOpen, openModal, closeModal } = useModal();
 
   useEffect(() => {
+    setValue("title", experience.title);
     setValue("company", experience.company);
     setValue("start_date", experience.start_date);
     setValue("description", experience.description);
@@ -67,6 +69,7 @@ const ExperienceTabItem: React.FC<ExperienceTabItemProps> = ({
       description: data.description,
       start_date: data.start_date,
       end_date: data.end_date,
+      title: data.title
       // user: currentUser.id,
     };
 
@@ -110,6 +113,17 @@ const ExperienceTabItem: React.FC<ExperienceTabItemProps> = ({
         description="Veuillez modifier les informations de la formation."
       >
         <div className="space-y-4">
+          <TextField
+            id="outlined-basic"
+            label="Intitulé"
+            size="small"
+            variant="outlined"
+            value={watchAllFields.title}
+            onChange={(e) => setValue("title", e.target.value)}
+            error={errors.title != null}
+            fullWidth
+            required
+          />
           <TextField
             id="outlined-basic"
             label="Entreprise"
@@ -176,6 +190,9 @@ const ExperienceTabItem: React.FC<ExperienceTabItemProps> = ({
 
       <TableRow key={experience.id}>
         <TableCell className="px-4 py-3 text-gray-800 text-start font-bold text-theme-sm dark:text-gray-400">
+          {experience.title}
+        </TableCell>
+        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
           {experience.company}
         </TableCell>
         <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

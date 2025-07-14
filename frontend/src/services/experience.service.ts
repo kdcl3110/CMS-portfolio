@@ -14,7 +14,7 @@ const updateExperience = async (id: number, data: ExperienceFormPayload) => {
 };
 
 const getExperiences = async (userId: number) => {
-  return api.get(`/experiences/${userId}/`).then((response: any) => {
+  return api.get(`/experiences/user/${userId}/`).then((response: any) => {
     return response.data;
   });
 };

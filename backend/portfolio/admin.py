@@ -19,7 +19,9 @@ from .models import (
     Category,
     Article,
     Skill,
-    SocialType
+    SocialType,
+    Project,
+    Service
 )
 
 class CustomUserCreationForm(UserCreationForm):
@@ -70,7 +72,7 @@ class UserAdmin(BaseUserAdmin):
             'fields': ('email', 'password')
         }),
         (_('Informations personnelles'), {
-            'fields': ('username', 'first_name', 'last_name', 'bio')
+            'fields': ('username', 'first_name', 'last_name', 'brief_description', 'bio')
         }),
         (_('Images'), {
             'fields': ('profile_image', 'profile_image_url', 'banner', 'banner_url'),
@@ -186,8 +188,8 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(Education)
 class EducationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'school', 'description_short', 'start_date', 'end_date', 'is_current')
-    search_fields = ('user__username', 'user__email', 'school', 'description')
+    list_display = ('user', 'title', 'school', 'description_short', 'start_date', 'end_date', 'is_current')
+    search_fields = ('user__username', 'user__email', 'school', 'description', 'title')
     list_per_page = 20
     list_filter = ('start_date', 'end_date', 'school')
     # date_hierarchy = 'start_date'  # Commenté temporairement
@@ -206,8 +208,8 @@ class EducationAdmin(admin.ModelAdmin):
 
 @admin.register(Experience)
 class ExperienceAdmin(admin.ModelAdmin):
-    list_display = ('user', 'company', 'description_short', 'start_date', 'end_date', 'is_current')
-    search_fields = ('user__username', 'user__email', 'company', 'description')
+    list_display = ('user', 'title', 'company', 'description_short', 'start_date', 'end_date', 'is_current')
+    search_fields = ('user__username', 'user__email', 'company', 'description', 'title')
     list_per_page = 20
     list_filter = ('start_date', 'end_date', 'company')
     # date_hierarchy = 'start_date'  # Commenté temporairement
@@ -303,6 +305,207 @@ class SkillAdmin(admin.ModelAdmin):
             return "Date invalide"
     created_at_safe.short_description = "Créé le"
     created_at_safe.admin_order_field = 'created_at'
+
+@admin.register(Service)
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'price_display', 'duration_display', 'is_active', 'icon_preview', 'tags_display', 'created_at_safe')
+    search_fields = ('title', 'description', 'user__username', 'user__email')
+    list_per_page = 20
+    list_filter = ('is_active', 'user')
+    list_editable = ('is_active',)
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('Informations de base', {
+            'fields': ('user', 'title', 'description', 'is_active')
+        }),
+        ('Icône', {
+            'fields': ('icon', 'icon_url'),
+            'description': 'L\'URL est générée automatiquement après upload'
+        }),
+        ('Tarification', {
+            'fields': ('price', 'duration_hours'),
+            'description': 'Prix en euros et durée en heures'
+        }),
+        ('Catégorisation', {
+            'fields': ('tags',),
+            'description': 'Tags au format JSON (ex: ["web", "design", "mobile"])'
+        }),
+        ('Métadonnées', {
+            'fields': ('created_at_safe', 'updated_at_safe'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    readonly_fields = ('icon_url', 'created_at_safe', 'updated_at_safe')
+    
+    def created_at_safe(self, obj):
+        """Affichage sécurisé de la date de création"""
+        try:
+            if obj.created_at:
+                if timezone.is_naive(obj.created_at):
+                    aware_datetime = timezone.make_aware(obj.created_at)
+                else:
+                    aware_datetime = obj.created_at
+                return aware_datetime.strftime("%d/%m/%Y %H:%M")
+            return "Non défini"
+        except (ValueError, TypeError):
+            return "Date invalide"
+    created_at_safe.short_description = "Créé le"
+    created_at_safe.admin_order_field = 'created_at'
+    
+    def updated_at_safe(self, obj):
+        """Affichage sécurisé de la date de mise à jour"""
+        try:
+            if obj.updated_at:
+                if timezone.is_naive(obj.updated_at):
+                    aware_datetime = timezone.make_aware(obj.updated_at)
+                else:
+                    aware_datetime = obj.updated_at
+                return aware_datetime.strftime("%d/%m/%Y %H:%M")
+            return "Non défini"
+        except (ValueError, TypeError):
+            return "Date invalide"
+    updated_at_safe.short_description = "Modifié le"
+    updated_at_safe.admin_order_field = 'updated_at'
+    
+    def icon_preview(self, obj):
+        """Aperçu de l'icône du service"""
+        if obj.icon:
+            return format_html(
+                '<img src="{}" width="40" height="40" style="border-radius: 8px; object-fit: cover;" />',
+                obj.icon.url
+            )
+        return "Pas d'icône"
+    icon_preview.short_description = "Icône"
+    
+    def tags_display(self, obj):
+        """Affichage des tags"""
+        if obj.tags_list:
+            tags = obj.tags_list[:2]  # Afficher les 2 premiers
+            display = ", ".join(tags)
+            if len(obj.tags_list) > 2:
+                display += f" (+{len(obj.tags_list) - 2})"
+            return display
+        return "Aucun"
+    tags_display.short_description = "Tags"
+    
+    actions = ['activate_services', 'deactivate_services']
+    
+    def activate_services(self, request, queryset):
+        """Action pour activer les services"""
+        updated = queryset.update(is_active=True)
+        self.message_user(request, f'{updated} service(s) activé(s).')
+    activate_services.short_description = "Activer les services sélectionnés"
+    
+    def deactivate_services(self, request, queryset):
+        """Action pour désactiver les services"""
+        updated = queryset.update(is_active=False)
+        self.message_user(request, f'{updated} service(s) désactivé(s).')
+    deactivate_services.short_description = "Désactiver les services sélectionnés"
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'image_preview', 'technologies_display', 'created_at_safe')
+    search_fields = ('title', 'description', 'user__username', 'user__email')
+    list_per_page = 20
+    list_filter = ('user',)
+    ordering = ['-created_at']
+    
+    fieldsets = (
+        ('Informations de base', {
+            'fields': ('user', 'title', 'description')
+        }),
+        ('Image', {
+            'fields': ('image', 'image_url'),
+            'description': 'L\'URL est générée automatiquement après upload'
+        }),
+        ('Technologies', {
+            'fields': ('technologies',),
+            'description': 'Liste des technologies au format JSON (ex: ["React", "Django", "PostgreSQL"])'
+        }),
+        ('URLs', {
+            'fields': ('demo_url', 'github_url'),
+            'classes': ('collapse',)
+        }),
+        ('Métadonnées', {
+            'fields': ('created_at_safe', 'updated_at_safe'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    readonly_fields = ('image_url', 'created_at_safe', 'updated_at_safe')
+    
+    def created_at_safe(self, obj):
+        """Affichage sécurisé de la date de création"""
+        try:
+            if obj.created_at:
+                if timezone.is_naive(obj.created_at):
+                    aware_datetime = timezone.make_aware(obj.created_at)
+                else:
+                    aware_datetime = obj.created_at
+                return aware_datetime.strftime("%d/%m/%Y %H:%M")
+            return "Non défini"
+        except (ValueError, TypeError):
+            return "Date invalide"
+    created_at_safe.short_description = "Créé le"
+    created_at_safe.admin_order_field = 'created_at'
+    
+    def updated_at_safe(self, obj):
+        """Affichage sécurisé de la date de mise à jour"""
+        try:
+            if obj.updated_at:
+                if timezone.is_naive(obj.updated_at):
+                    aware_datetime = timezone.make_aware(obj.updated_at)
+                else:
+                    aware_datetime = obj.updated_at
+                return aware_datetime.strftime("%d/%m/%Y %H:%M")
+            return "Non défini"
+        except (ValueError, TypeError):
+            return "Date invalide"
+    updated_at_safe.short_description = "Modifié le"
+    updated_at_safe.admin_order_field = 'updated_at'
+    
+    def image_preview(self, obj):
+        """Aperçu de l'image du projet"""
+        if obj.image:
+            return format_html(
+                '<img src="{}" width="60" height="40" style="border-radius: 5px; object-fit: cover;" />',
+                obj.image.url
+            )
+        return "Pas d'image"
+    image_preview.short_description = "Aperçu"
+    
+    def technologies_display(self, obj):
+        """Affichage des technologies"""
+        if obj.technologies_list:
+            technologies = obj.technologies_list[:3]  # Afficher les 3 premières
+            display = ", ".join(technologies)
+            if len(obj.technologies_list) > 3:
+                display += f" (+{len(obj.technologies_list) - 3})"
+            return display
+        return "Aucune"
+    technologies_display.short_description = "Technologies"
+    
+    # actions = ['mark_completed', 'mark_in_progress', 'mark_archived']
+    
+    # def mark_completed(self, request, queryset):
+    #     """Action pour marquer les projets comme terminés"""
+    #     updated = queryset.update(status='completed')
+    #     self.message_user(request, f'{updated} projet(s) marqué(s) comme terminé(s).')
+    # mark_completed.short_description = "Marquer comme terminé"
+    
+    # def mark_in_progress(self, request, queryset):
+    #     """Action pour marquer les projets comme en cours"""
+    #     updated = queryset.update(status='in_progress')
+    #     self.message_user(request, f'{updated} projet(s) marqué(s) comme en cours.')
+    # mark_in_progress.short_description = "Marquer comme en cours"
+    
+    # def mark_archived(self, request, queryset):
+    #     """Action pour archiver les projets"""
+    #     updated = queryset.update(status='archived')
+    #     self.message_user(request, f'{updated} projet(s) archivé(s).')
+    # mark_archived.short_description = "Archiver"
 
 
 @admin.register(Settings)

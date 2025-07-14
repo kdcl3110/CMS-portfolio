@@ -9,6 +9,8 @@ import SchoolIcon from "@mui/icons-material/School";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import PublicIcon from "@mui/icons-material/Public";
 import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
+import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 // Assume these icons are imported from an icon library
 import {
   ChevronDownIcon,
@@ -55,6 +57,16 @@ const navItems: NavItem[] = [
     icon: <PublicIcon />,
     name: "Socials",
     path: "/socials",
+  },
+  {
+    icon: <BusinessCenterIcon />,
+    name: "Projets",
+    path: "/projects",
+  },
+  {
+    icon: <SettingsSuggestIcon />,
+    name: "Services",
+    path: "/services",
   },
   // {
   //   name: "Forms",

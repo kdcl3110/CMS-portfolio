@@ -21,9 +21,9 @@ import { useForm } from "react-hook-form";
 import { SkillPayload } from "../../interfaces/skill";
 import { createSkill, getMySkills } from "../../slices/skill";
 import { showError, showSucces } from "../../components/Toasts";
-import CompetenceTabItem from "./CompetenceTabItem";
+import SkillTabItem from "./SkillTabItem";
 
-const Competence: React.FC = () => {
+const Skill: React.FC = () => {
   const validationSchema = Yup.object().shape({
     label: Yup.string().required("Entrer l'intitulé de la compétence").trim(),
   });
@@ -117,7 +117,7 @@ const Competence: React.FC = () => {
             {/* Table Body */}
             <TableBody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
               {skills.map((skill) => (
-                <CompetenceTabItem key={skill.id} skill={skill} />
+                <SkillTabItem key={skill.id} skill={skill} />
               ))}
             </TableBody>
           </Table>
@@ -129,4 +129,4 @@ const Competence: React.FC = () => {
   );
 };
 
-export default Competence;
+export default Skill;

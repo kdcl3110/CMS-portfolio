@@ -63,6 +63,7 @@ class User(AbstractUser):
     city = models.CharField(max_length=100, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     street = models.CharField(max_length=200, blank=True)
+    brief_description = models.CharField(max_length=200, blank=True)
     house_number = models.CharField(max_length=10, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
     

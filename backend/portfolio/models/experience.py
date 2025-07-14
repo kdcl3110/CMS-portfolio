@@ -11,6 +11,7 @@ class Experience(TimeStampedModel):
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField()
     company = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"Experience for {self.user.username}"

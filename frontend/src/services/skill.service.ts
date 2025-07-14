@@ -14,7 +14,7 @@ const updateSkill = async (id: number, data: SkillPayload) => {
 };
 
 const getSkills = async (userId: number) => {
-  return api.get(`/skills/${userId}/`).then((response: any) => {
+  return api.get(`/skills/user/${userId}/`).then((response: any) => {
     return response.data;
   });
 };

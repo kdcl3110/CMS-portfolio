@@ -9,7 +9,7 @@ class EducationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Education
         fields = [
-            'id', 'user', 'user_name', 'start_date', 'end_date', 
+            'id', 'user', 'user_name', 'title', 'start_date', 'end_date', 
             'description', 'school', 'is_current', 'duration', 
             'created_at', 'updated_at'
         ]

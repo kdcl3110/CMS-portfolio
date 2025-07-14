@@ -16,11 +16,11 @@ import { Popconfirm } from "antd";
 import { Skill, SkillPayload } from "../../interfaces/skill";
 import { deleteSkill, getMySkills, updateSkill } from "../../slices/skill";
 
-interface CompetenceTabItemProps {
+interface SkillTabItemProps {
   skill: Skill;
 }
 
-const CompetenceTabItem: React.FC<CompetenceTabItemProps> = ({ skill }) => {
+const SkillTabItem: React.FC<SkillTabItemProps> = ({ skill }) => {
   const validationSchema = Yup.object().shape({
     label: Yup.string().required("Entrer l'intitulé de la compétence").trim(),
   });
@@ -152,4 +152,4 @@ const CompetenceTabItem: React.FC<CompetenceTabItemProps> = ({ skill }) => {
   );
 };
 
-export default CompetenceTabItem;
+export default SkillTabItem;

@@ -8,7 +8,6 @@ export interface RegisterPayload {
   [key: string]: any;
 }
 
-
 export interface UpdateUserPayload {
   email?: string;
   firstName?: string;
@@ -37,6 +36,7 @@ export interface User {
   username: string;
   email: string;
   first_name: string;
+  brief_description: string;
   last_name: string;
   profile_image_url?: string;
   banner_url: string;

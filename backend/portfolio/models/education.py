@@ -11,6 +11,7 @@ class Education(TimeStampedModel):
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField()
     school = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return f"Education for {self.user.username} - School: {self.school}"

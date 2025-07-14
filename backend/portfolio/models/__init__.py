@@ -8,3 +8,5 @@ from .social import Social
 from .contact import Contact
 from .category import Category
 from .article import Article
+from .service import Service
+from .project import Project

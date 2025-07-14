@@ -9,6 +9,34 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store";
 import { updateProfil } from "../slices/auth";
 import { showError, showSucces } from "../components/Toasts";
+import { InboxOutlined } from "@ant-design/icons";
+import type { UploadProps } from "antd";
+import { message, Upload } from "antd";
+import FormLabel from "@mui/material/FormLabel";
+
+const { Dragger } = Upload;
+
+const props: UploadProps = {
+  name: "file",
+  multiple: false,
+  accept: ".pdf",
+
+  // action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
+    if (status === "done") {
+      message.success(`${info.file.name} file uploaded successfully.`);
+    } else if (status === "error") {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+  },
+  onDrop(e) {
+    console.log("Dropped files", e.dataTransfer.files);
+  },
+};
 
 const GridItem = ({
   children,
@@ -34,6 +62,7 @@ interface UserForm {
   lastName: string;
   firstName: string;
   phoneNumber: string;
+  briefDescription: string;
 
   // Biographie
   biography: string;
@@ -72,6 +101,7 @@ const Personal: React.FC = () => {
     houseNumber: "",
     profilImage: null,
     banner: null,
+    briefDescription: "",
   });
 
   const dispatch = useDispatch<AppDispatch>();
@@ -91,6 +121,7 @@ const Personal: React.FC = () => {
       houseNumber: currentUser?.house_number || "",
       profilImage: null,
       banner: null,
+      briefDescription: currentUser?.brief_description || "",
     });
   }, [currentUser?.id]);
 
@@ -172,6 +203,8 @@ const Personal: React.FC = () => {
       if (userData.firstName) formData.append("first_name", userData.firstName);
       if (userData.lastName) formData.append("last_name", userData.lastName);
       if (userData.country) formData.append("country", userData.country);
+      if (userData.briefDescription)
+        formData.append("brief_description", userData.briefDescription);
       if (userData.city) formData.append("city", userData.city);
       if (userData.biography) formData.append("bio", userData.biography);
       if (userData.postalCode)
@@ -292,6 +325,15 @@ const Personal: React.FC = () => {
             fullWidth
           />
           <TextField
+            label="Description en quelques mots"
+            value={userData.briefDescription}
+            size="small"
+            onChange={handleInputChange("briefDescription")}
+            variant="outlined"
+            fullWidth
+            required
+          />
+          <TextField
             label="Numéro de téléphone"
             value={userData.phoneNumber}
             type="text"
@@ -371,7 +413,7 @@ const Personal: React.FC = () => {
         <GridItem title="Photo de profil">
           <UploadCard
             width="w-full"
-            height="h-48"
+            height="h-64"
             url={currentUser.profile_image_url}
             onFileSelect={(file) => {
               setUserData((prev) => ({
@@ -390,7 +432,7 @@ const Personal: React.FC = () => {
         <GridItem title="Bannière">
           <UploadCard
             width="w-full"
-            height="h-48"
+            height="h-64"
             url={currentUser.banner_url}
             onFileSelect={(file) => {
               setUserData((prev) => ({
@@ -406,10 +448,20 @@ const Personal: React.FC = () => {
           )} */}
         </GridItem>
 
-        <GridItem title="Terminer">
-          <div className="text-gray-600">
-            Si les modifications sont terminées, vous pouvez les enregistrer en
-            cliquant sur le bouton suivant.
+        <GridItem title="CV & Terminer">
+          <div >
+            <Dragger {...props}>
+              <p className="ant-upload-drag-icon">
+                <InboxOutlined />
+              </p>
+              <p className="ant-upload-text">
+                Cliquez ou faites glisser le fichier dans cette zone pour le
+                télécharger
+              </p>
+              <p className="ant-upload-hint">
+                Seuls les fichiers PDF sont acceptés. Taille maximale : 10MB.
+              </p>
+            </Dragger>
           </div>
           <Button
             variant="contained"

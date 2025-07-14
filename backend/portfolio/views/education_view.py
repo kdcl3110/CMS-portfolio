@@ -1,8 +1,7 @@
-# portfolio/views/education_view.py
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from ..models.education import Education
 from ..models.user import User
@@ -25,23 +24,40 @@ class EducationViewSet(viewsets.ModelViewSet):
         """Associe automatiquement la formation à l'utilisateur connecté"""
         serializer.save(user=self.request.user)
 
+    def get_permissions(self):
+        """
+        Définir des permissions spécifiques selon l'action
+        """
+        if self.action == 'educations_by_user':
+            # Accès public pour consulter les formations d'un utilisateur
+            permission_classes = [AllowAny]
+        else:
+            # Authentification requise pour toutes les autres actions
+            permission_classes = [IsAuthenticated]
+        
+        return [permission() for permission in permission_classes]
+
     @action(detail=False, methods=['get'], url_path='user/(?P<user_id>[^/.]+)')
     def educations_by_user(self, request, user_id=None):
         """
-        Endpoint pour récupérer les formations d'un utilisateur spécifique
+        Endpoint PUBLIQUE pour récupérer les formations d'un utilisateur spécifique
         URL: /api/educations/user/{user_id}/
+        
+        Accessible sans authentification - permet aux visiteurs de voir
+        les formations d'un utilisateur pour son portfolio public
         """
         user = get_object_or_404(User, id=user_id)
         
-        if not (request.user == user or request.user.is_staff or request.user.is_superuser):
-            return Response(
-                {'error': 'Vous n\'avez pas la permission d\'accéder à ces données'}, 
-                status=status.HTTP_403_FORBIDDEN
-            )
-        
-        educations = Education.objects.filter(user=user)
+        # Récupérer toutes les formations de l'utilisateur
+        # (pas de restriction car endpoint public)
+        educations = Education.objects.filter(user=user).order_by('-start_date')
         serializer = self.get_serializer(educations, many=True)
-        return Response(serializer.data)
+        
+        return Response({
+            'user_id': user.id,
+            'user_name': user.username,
+            'educations': serializer.data
+        })
 
     @action(detail=False, methods=['get'], url_path='my-educations')
     def my_educations(self, request):
